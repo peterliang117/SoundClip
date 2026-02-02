@@ -1,0 +1,34 @@
+[package]
+name = "soundclip"
+version = "1.0.0"
+edition = "2021"
+
+[lib]
+name = "soundclip_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[[bin]]
+name = "soundclip"
+path = "src/main.rs"
+
+[dependencies]
+tauri = { version = "2", features = ["devtools"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-shell = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["process", "io-util", "fs", "sync", "macros"] }
+reqwest = { version = "0.12", features = ["json"] }
+dirs = "6"
+regex = "1"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

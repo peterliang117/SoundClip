@@ -1,0 +1,10 @@
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/
+*.exe
+*.msi
+*.nsis
+nul
+.claude/
+app-icon.png
