@@ -38,6 +38,24 @@ pub fn is_ffmpeg_installed() -> bool {
         .unwrap_or(false)
 }
 
+/// Return the first available JS runtime for yt-dlp's YouTube extractor.
+/// Priority: node > deno > bun.
+pub fn ytdlp_js_runtime() -> Option<String> {
+    for runtime in ["node", "deno", "bun"] {
+        if Command::new(runtime)
+            .arg("--version")
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .status()
+            .map(|s| s.success())
+            .unwrap_or(false)
+        {
+            return Some(runtime.to_string());
+        }
+    }
+    None
+}
+
 /// Kill an entire process tree on Windows using `taskkill /T /F /PID`.
 pub fn kill_process_tree(pid: u32) {
     let _ = Command::new("taskkill")

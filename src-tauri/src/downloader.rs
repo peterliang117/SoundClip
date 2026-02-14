@@ -31,14 +31,23 @@ pub async fn run(
 
     let mut args: Vec<String> = vec![
         "-x".into(),
-        "-P".into(),
-        format!("home:{save_path}"),
+        "--paths".into(),
+        save_path,
         "-o".into(),
-        "%(title).200s [%(id)s].%(ext)s".into(),
+        "%(title).120s [%(id)s].%(ext)s".into(),
+        "--trim-filenames".into(),
+        "120".into(),
         "--windows-filenames".into(),
+        "--force-overwrites".into(),
+        "--no-mtime".into(),
+        "--no-part".into(),
+        "--no-continue".into(),
         "--newline".into(),
         "--no-colors".into(),
-        format!("--ffmpeg-location={}", bin_dir.to_string_lossy()),
+        "--encoding".into(),
+        "utf-8".into(),
+        "--ffmpeg-location".into(),
+        bin_dir.to_string_lossy().to_string(),
     ];
 
     if audio_format != "best" {
@@ -50,6 +59,11 @@ pub async fn run(
         args.push("--yes-playlist".into());
     } else {
         args.push("--no-playlist".into());
+    }
+
+    if let Some(runtime) = utils::ytdlp_js_runtime() {
+        args.push("--js-runtimes".into());
+        args.push(runtime);
     }
 
     args.push(url);
